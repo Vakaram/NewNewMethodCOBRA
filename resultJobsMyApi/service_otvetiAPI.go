@@ -21,6 +21,6 @@ func (s *MyService) HendleMain() string {
 }
 
 // Метод над myService
-func (s *MyService) ADDTest(idErr string) string {
-	return "Проверь нового пользователя в бд, эх как бы сюда еще что нибудь передать хо хо хо " + idErr
+func (s *MyService) AddEmployee(idErr string) string {
+	return "Добавили пользователя вот его ID  " + idErr
 }

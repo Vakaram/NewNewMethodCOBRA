@@ -9,10 +9,10 @@ import (
 )
 
 type ConfigForApiserver struct {
-	Env           string `yaml:"env"    env-default:"local"` // для сервера
-	HTTPServer    `yaml:"http_server"`
-	LogLevel      string `yaml:"log-level"    env-default:"debug"` // для сервера
-	ServisEmploye servis
+	Env            string `yaml:"env"    env-default:"local"` // для сервера
+	HTTPServer     `yaml:"http_server"`
+	LogLevel       string `yaml:"log-level"    env-default:"debug"` // для сервера
+	ServisEmployee servis
 }
 
 type HTTPServer struct {
@@ -24,7 +24,7 @@ type HTTPServer struct {
 type servis interface {
 	SayHello() string
 	HendleMain() string
-	ADDTest(id string) string
+	AddEmployee(id string) string
 }
 
 // MustNewConfigApiSrever: заполнять будет нашу стрктуру конфига ConfigForApiserver

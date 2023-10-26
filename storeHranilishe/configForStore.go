@@ -27,7 +27,6 @@ func NewConfigReturnStrokaPodkl() *Config {
 	}
 	// проверяю что удалось считать строку из файла
 	logrus.Info("Удалось выпарсить вот такоую строку " + cfg.DatabaseURL)
-	//fmt.Println(cfg.DatabaseURL)
 
 	return &cfg
 

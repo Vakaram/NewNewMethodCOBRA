@@ -6,14 +6,14 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"net/http"
+	"testdbNewMetods/internal/app/modelEmployee"
 	"testdbNewMetods/storeHranilishe"
 )
 
 type APIServer struct {
-	config *ConfigForApiserver //
-	logger *logrus.Logger      //добавляем логгер в apiserver
-	router *mux.Router         // то что слушаем и реагируем типа /hello
-	//store        *storeHranilishe.Store
+	config       *ConfigForApiserver                 //
+	logger       *logrus.Logger                      //добавляем логгер в apiserver
+	router       *mux.Router                         // то что слушаем и реагируем типа /hello
 	employeeRepo *storeHranilishe.EmployeeRepository //тест вынос логики store
 }
 
@@ -69,31 +69,36 @@ func (s *APIServer) configurateLogger() error {
 func (s *APIServer) configRouter() {
 	s.router.HandleFunc("/", s.HendleMain)       // сюда придем посмотрим а уж потом вызовим функцию которая ниже =)
 	s.router.HandleFunc("/hello", s.HandleHello) // сюда придем посмотрим а уж потом вызовим функцию которая ниже =)
-	s.router.HandleFunc("/add", s.ADDTest)
+	s.router.HandleFunc("/addemploye", s.AddEmployee)
 	//s.router.HandleFunc("/createemployee", s.CreateEmployee)
 }
 
 func (s *APIServer) HandleHello(w http.ResponseWriter, r *http.Request) {
 	//service := epmloyeeService.NewMyService() // определили сервис
-	response := s.config.ServisEmploye.SayHello() // определили нужный метод
-	fmt.Fprintf(w, response)                      // передали нужный метод
+	response := s.config.ServisEmployee.SayHello() // определили нужный метод
+	fmt.Fprintf(w, response)                       // передали нужный метод
 }
 
 func (s *APIServer) HendleMain(w http.ResponseWriter, r *http.Request) {
 	//service := epmloyeeService.NewMyService() // определили сервис
-	response := s.config.ServisEmploye.HendleMain() // определили нужный метод
-	fmt.Fprintf(w, response)                        // передали нужный метод
+	response := s.config.ServisEmployee.HendleMain() // определили нужный метод
+	fmt.Fprintf(w, response)                         // передали нужный метод
 }
-func (s *APIServer) ADDTest(w http.ResponseWriter, r *http.Request) {
-	//service := epmloyeeService.NewMyService() // определили сервис
-	id, err := s.employeeRepo.CreateEmployee()
+
+func (s *APIServer) AddEmployee(w http.ResponseWriter, r *http.Request) {
+	modelEmployee := modelEmployee.EmployeeModel{
+		Login:    "Testlog",
+		Password: "TestPass",
+	}
+	//cxt := s.employeeRepo.Store.CXT
+	id, err := s.employeeRepo.CreateEmployee(modelEmployee)
 	if err != nil {
-		response := s.config.ServisEmploye.ADDTest(err.Error()) // определили нужный метод
+		response := s.config.ServisEmployee.AddEmployee(err.Error()) // определили нужный метод
 		fmt.Fprintf(w, response)
 		return
 	}
-	response := s.config.ServisEmploye.ADDTest(id) // определили нужный метод
-	fmt.Fprintf(w, response)                       // передали нужный метод
+	response := s.config.ServisEmployee.AddEmployee(id) // определили нужный метод
+	fmt.Fprintf(w, response)                            // передали нужный метод
 }
 
 //func (s *APIServer) CreateEmployeeINStoreINEmployeerepository() (string, error) {

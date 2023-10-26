@@ -1,5 +1,11 @@
 package storeHranilishe
 
+import (
+	"fmt"
+	"os"
+	"testdbNewMetods/internal/app/modelEmployee"
+)
+
 type EmployeeRepository struct {
 	Store *Store
 }
@@ -11,12 +17,10 @@ func NewEmployeeRepository(store *Store) *EmployeeRepository {
 }
 
 // тестовая функция проверить работу db
-func (r *EmployeeRepository) CreateEmployee() (string, error) {
-	var id string
-	if err := r.Store.DB.QueryRow(
-		"INSERT INTO turnixSchem.employees (login,password) VALUES ($1,$2) RETURNING id ",
-		"la la",
-		"la la la 3 ").Scan(&id); err != nil {
+func (r *EmployeeRepository) CreateEmployee(emp modelEmployee.EmployeeModel) (string, error) {
+	id, err := r.Store.CreateEmployee(emp)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
 		return "err", err
 	}
 	return id, nil

@@ -16,7 +16,7 @@ func main() {
 
 	//типо мы тут сказали ему где брать ответы на запросы для сотрудников думаю такое разделение нужно будет
 	service := resultJobsMyApi.NewMyServiceEmployee()
-	cfg.ServisEmploye = service
+	cfg.ServisEmployee = service
 	fmt.Printf("\n Обоготил конфиг вот этим , %v \n", service)
 	fmt.Printf("\n И пока 1стадия Вот видем так  , %v \n", cfg)
 
