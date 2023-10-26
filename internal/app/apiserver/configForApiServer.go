@@ -24,7 +24,7 @@ type HTTPServer struct {
 type servis interface {
 	SayHello() string
 	HendleMain() string
-	//testUDALIT() string
+	ADDTest(id string) string
 }
 
 // MustNewConfigApiSrever: заполнять будет нашу стрктуру конфига ConfigForApiserver

@@ -13,7 +13,8 @@ type APIServer struct {
 	config *ConfigForApiserver //
 	logger *logrus.Logger      //добавляем логгер в apiserver
 	router *mux.Router         // то что слушаем и реагируем типа /hello
-	store  *storeHranilishe.Store
+	//store        *storeHranilishe.Store
+	employeeRepo *storeHranilishe.EmployeeRepository //тест вынос логики store
 }
 
 // Вроде это вообще типо набор по умолчанию типа мы конфиг наш передадим чтобы вызывать старт метод
@@ -23,7 +24,8 @@ func New(config *ConfigForApiserver, store *storeHranilishe.Store) *APIServer {
 		config: config,
 		logger: logrus.New(),    // logrus.NewStore() - это встроенно в логрус а не нами написано
 		router: mux.NewRouter(), // возвращает новый экземпляр маршрутизатора
-		store:  store,
+		//store:        store,
+		employeeRepo: storeHranilishe.NewEmployeeRepository(store),
 	}
 }
 
@@ -67,7 +69,7 @@ func (s *APIServer) configurateLogger() error {
 func (s *APIServer) configRouter() {
 	s.router.HandleFunc("/", s.HendleMain)       // сюда придем посмотрим а уж потом вызовим функцию которая ниже =)
 	s.router.HandleFunc("/hello", s.HandleHello) // сюда придем посмотрим а уж потом вызовим функцию которая ниже =)
-	//s.router.HandleFunc("/testapi", s.TestApi)
+	s.router.HandleFunc("/add", s.ADDTest)
 	//s.router.HandleFunc("/createemployee", s.CreateEmployee)
 }
 
@@ -82,17 +84,28 @@ func (s *APIServer) HendleMain(w http.ResponseWriter, r *http.Request) {
 	response := s.config.ServisEmploye.HendleMain() // определили нужный метод
 	fmt.Fprintf(w, response)                        // передали нужный метод
 }
+func (s *APIServer) ADDTest(w http.ResponseWriter, r *http.Request) {
+	//service := epmloyeeService.NewMyService() // определили сервис
+	id, err := s.employeeRepo.CreateEmployee()
+	if err != nil {
+		response := s.config.ServisEmploye.ADDTest(err.Error()) // определили нужный метод
+		fmt.Fprintf(w, response)
+		return
+	}
+	response := s.config.ServisEmploye.ADDTest(id) // определили нужный метод
+	fmt.Fprintf(w, response)                       // передали нужный метод
+}
 
 //func (s *APIServer) CreateEmployeeINStoreINEmployeerepository() (string, error) {
-//	//s.store.
-//	//if err := s.store.   .db.QueryRow(
-//	//	"INSERT INTO turnixSchem.employees (login,password) VALUES ($1,$2) RETURNING id ",
-//	//	emp.Login, //
-//	//	emp.Password,
-//	//).Scan(&emp.ID); err != nil {
-//	//	return nil, err
-//	//}
-//	//
-//	//return emp, nil
+//	var id string
+//	if err := s.store.DB.QueryRow(
+//		"INSERT INTO turnixSchem.employees (login,password) VALUES ($1,$2) RETURNING id ",
+//		"la la", //
+//		"la la la 3 ",
+//	).Scan(&id); err != nil {
+//		return "err", err
+//	}
+//
+//	return id, nil
 //
 //}

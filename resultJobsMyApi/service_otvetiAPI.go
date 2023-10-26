@@ -19,3 +19,8 @@ func (s *MyService) SayHello() string {
 func (s *MyService) HendleMain() string {
 	return "Вы на стартовой странице урааааа"
 }
+
+// Метод над myService
+func (s *MyService) ADDTest(idErr string) string {
+	return "Проверь нового пользователя в бд, эх как бы сюда еще что нибудь передать хо хо хо " + idErr
+}

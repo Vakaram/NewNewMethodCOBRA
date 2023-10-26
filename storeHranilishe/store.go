@@ -10,7 +10,7 @@ import (
 // структура стора
 type Store struct {
 	config *Config // по сути строка подключения с портом и паролем сюда она нам вернется при инициализации
-	db     *sql.DB
+	DB     *sql.DB
 }
 
 // вернет нам стркутуру store и мы сможем использовать методы store например open
@@ -31,6 +31,6 @@ func NewStore(config *Config) (*Store, error) {
 
 	return &Store{
 		config: config,
-		db:     db,
+		DB:     db,
 	}, nil
 }
