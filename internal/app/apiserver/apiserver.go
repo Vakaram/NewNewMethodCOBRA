@@ -6,7 +6,6 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"net/http"
-	"testdbNewMetods/internal/app/modelEmployee"
 	"testdbNewMetods/storeHranilishe"
 )
 
@@ -25,7 +24,7 @@ func New(config *ConfigForApiserver, store *storeHranilishe.Store) *APIServer {
 		logger: logrus.New(),    // logrus.NewStore() - это встроенно в логрус а не нами написано
 		router: mux.NewRouter(), // возвращает новый экземпляр маршрутизатора
 		//store:        store,
-		employeeRepo: storeHranilishe.NewEmployeeRepository(store),
+		//employeeRepo: storeHranilishe.NewEmployeeRepository(store),
 	}
 }
 
@@ -67,9 +66,10 @@ func (s *APIServer) configurateLogger() error {
 // а искать программа их пойдет в serviceOtvetAPI
 // и еще поставить нужно их в интерфейс конфига в servis styrct
 func (s *APIServer) configRouter() {
+	var interfaceRep storeHranilishe.InterfaceEmployeeRepository
 	s.router.HandleFunc("/", s.HendleMain)       // сюда придем посмотрим а уж потом вызовим функцию которая ниже =)
 	s.router.HandleFunc("/hello", s.HandleHello) // сюда придем посмотрим а уж потом вызовим функцию которая ниже =)
-	s.router.HandleFunc("/addemploye", s.AddEmployee)
+	s.router.HandleFunc("/addemploye", interfaceRep.AddEmployee())
 	//s.router.HandleFunc("/createemployee", s.CreateEmployee)
 }
 
@@ -85,21 +85,22 @@ func (s *APIServer) HendleMain(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, response)                         // передали нужный метод
 }
 
-func (s *APIServer) AddEmployee(w http.ResponseWriter, r *http.Request) {
-	modelEmployee := modelEmployee.EmployeeModel{
-		Login:    "Testlog",
-		Password: "TestPass",
-	}
-	//cxt := s.employeeRepo.Store.CXT
-	id, err := s.employeeRepo.CreateEmployee(modelEmployee)
-	if err != nil {
-		response := s.config.ServisEmployee.AddEmployee(err.Error()) // определили нужный метод
-		fmt.Fprintf(w, response)
-		return
-	}
-	response := s.config.ServisEmployee.AddEmployee(id) // определили нужный метод
-	fmt.Fprintf(w, response)                            // передали нужный метод
-}
+//func (s *APIServer) AddEmployee(w http.ResponseWriter, r *http.Request) {
+//	modelEmployee := modelEmployee.EmployeeModel{
+//		Login:    "Testlog",
+//		Password: "TestPass",
+//	}
+//	var interfaceRep storeHranilishe.InterfaceEmployeeRepository
+//
+//	id, err := interfaceRep.CreateEmployee(modelEmployee)
+//	if err != nil {
+//		response := s.config.ServisEmployee.AddEmployee(err.Error()) // определили нужный метод
+//		fmt.Fprintf(w, response)
+//		return
+//	}
+//	response := id           // определили нужный метод
+//	fmt.Fprintf(w, response) // передали нужный метод
+//}
 
 //func (s *APIServer) CreateEmployeeINStoreINEmployeerepository() (string, error) {
 //	var id string

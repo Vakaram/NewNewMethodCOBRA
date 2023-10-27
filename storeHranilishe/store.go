@@ -41,7 +41,6 @@ func NewStore(config *Config) (*Store, error) {
 	}, nil
 }
 
-// todo сюда перенести запросы
 func (s *Store) CreateEmployee(emp modelEmployee.EmployeeModel) (string, error) {
 	ctx, _ := context.WithTimeout(context.Background(), 2*time.Second)
 
